@@ -6,22 +6,15 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
 } from "react-router";
+import stylesheet from "./app.css?url";
+import { SideBar } from "./components/sidebar";
+import { SiteHeader } from "./components/site-header";
 
 import type { Route } from "./+types/root";
-import stylesheet from "./app.css?url";
 
 export const links: Route.LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-  },
   { rel: "stylesheet", href: stylesheet },
+  { rel: "icon", href: "/favicon.svg" },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -33,7 +26,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="font-mono">
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -43,7 +36,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <SideBar>
+      <SiteHeader />
+      <main className="flex flex-col flex-grow">
+        <Outlet />
+      </main>
+    </SideBar>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

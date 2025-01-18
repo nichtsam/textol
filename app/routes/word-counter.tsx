@@ -1,11 +1,11 @@
 export function meta() {
   return [
-    { title: "Textol" },
-    { name: "description", content: "Welcome to Textol!" },
+    { title: "Word Counter | Textol" },
+    { name: "description", content: "Count your words!" },
   ];
 }
 
-export default function Home() {
+export default function WordCounter() {
   return (
     <main className="pt-9 px-4">
       <section className="text-center mb-16">
