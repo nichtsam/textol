@@ -1,4 +1,6 @@
+import { ClipboardPaste } from "lucide-react";
 import { useState } from "react";
+import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { Textarea } from "~/components/ui/textarea";
 import { analyzeText } from "~/utils/text";
@@ -37,10 +39,29 @@ export default function WordCounter() {
           </div>
         </CardContent>
       </Card>
-      <Textarea
-        onChange={(e) => setText(e.target.value)}
-        className="resize-none h-[50vh]"
-      />
+      <div className="relative">
+        <Textarea
+          placeholder="Enter or Paste"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          className="peer resize-none h-[50vh]"
+        />
+        <Button
+          variant="outline"
+          className="absolute top-8 left-3 hidden peer-placeholder-shown:inline-flex"
+          onClick={async () => {
+            try {
+              const copied = await navigator.clipboard.readText();
+              setText(copied);
+            } catch (err) {
+              alert("Clipboard access denied!");
+            }
+          }}
+        >
+          <ClipboardPaste className="h-4 w-4" />
+          Paste
+        </Button>
+      </div>
     </main>
   );
 }
