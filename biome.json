@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "ignore": ["build"]
+    "ignore": ["build", ".react-router"]
   },
   "formatter": {
     "enabled": true,
