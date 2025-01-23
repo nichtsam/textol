@@ -1,4 +1,4 @@
-import { FileDigit, PencilRuler } from "lucide-react";
+import { FileDigit, FilePenLine, PencilRuler } from "lucide-react";
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router";
 import {
@@ -43,6 +43,15 @@ export function SideBar({ children }: { children: React.ReactNode }) {
                     <Link to="/word-counter">
                       <FileDigit />
                       <span>Word Counter</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to="/editor">
+                      <FilePenLine />
+                      <span>Editor</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
