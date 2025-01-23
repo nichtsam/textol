@@ -26,7 +26,7 @@ export default function WordCounter() {
         />
         <Button
           variant="outline"
-          className="absolute top-8 left-3 hidden peer-placeholder-shown:inline-flex"
+          className="absolute top-8 left-3 hidden md:peer-placeholder-shown:inline-flex"
           onClick={async () => {
             try {
               const copied = await navigator.clipboard.readText();
