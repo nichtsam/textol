@@ -1,8 +1,8 @@
 import { ClipboardPaste } from "lucide-react";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Button } from "~/components/ui/button";
-import { Card, CardContent } from "~/components/ui/card";
 import { Textarea } from "~/components/ui/textarea";
+import { cn } from "~/lib/utils";
 import { analyzeText } from "~/utils/text";
 
 export function meta() {
@@ -14,31 +14,9 @@ export function meta() {
 
 export default function WordCounter() {
   const [text, setText] = useState("");
-  const stats = analyzeText(text);
 
   return (
-    <main className="p-4 flex flex-col gap-4">
-      <Card>
-        <CardContent className="grid grid-cols-2 md:grid-cols-4">
-          <div className="flex flex-col">
-            <span className="text-muted-foreground text-sm">Characters</span>
-            <span className="flex">{stats.chars}</span>
-            <span className="flex">{stats.charsNoSpaces}</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-muted-foreground text-sm">Words</span>
-            <span>{stats.words.length}</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-muted-foreground text-sm">Sentence</span>
-            <span>{stats.sentences.length}</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-muted-foreground text-sm">Paragraphs</span>
-            <span>{stats.paragraphs.length}</span>
-          </div>
-        </CardContent>
-      </Card>
+    <main className="py-4 sm:px-4 gap-4 flex flex-col">
       <div className="relative">
         <Textarea
           placeholder="Enter or Paste"
@@ -62,6 +40,79 @@ export default function WordCounter() {
           Paste
         </Button>
       </div>
+
+      <Analysis text={text} />
     </main>
+  );
+}
+
+function Analysis({ text }: { text: string }) {
+  const stats = analyzeText(text);
+  const speakingTime = Math.round(stats.words.length / (150 / 60));
+  const readingTime = Math.round(stats.words.length / (200 / 60));
+
+  return (
+    <>
+      <div className="flex flex-wrap gap-2 justify-evenly lg:order-first">
+        <AnalysisItem
+          className="basis-32"
+          label="Characters"
+          content={stats.chars}
+        />
+        <AnalysisItem
+          label={
+            <span className="inline-flex flex-col text-center">
+              Characters<span className="text-xs">Without Spaces</span>
+            </span>
+          }
+          content={stats.charsNoSpaces}
+        />
+        <AnalysisItem
+          className="basis-32"
+          label="Words"
+          content={stats.words.length}
+        />
+        <AnalysisItem
+          className="basis-32"
+          label="Sentences"
+          content={stats.sentences.length}
+        />
+        <AnalysisItem
+          className="basis-32"
+          label="Paragraphs"
+          content={stats.paragraphs.length}
+        />
+      </div>
+
+      <div className="flex gap-2 justify-center flex-col sm:flex-row">
+        <AnalysisItem label="Reading Time" content={`${readingTime} seconds`} />
+        <AnalysisItem
+          label="speakingTime"
+          content={`${speakingTime} seconds`}
+        />
+      </div>
+    </>
+  );
+}
+
+function AnalysisItem({
+  label,
+  content,
+  className,
+}: {
+  label: ReactNode;
+  content: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex flex-col items-center rounded-xl border bg-card text-card-foreground shadow p-2 grow",
+        className
+      )}
+    >
+      <span>{content}</span>
+      <span className="text-muted-foreground text-sm">{label}</span>
+    </div>
   );
 }
