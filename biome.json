@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "ignore": ["build", ".react-router"]
+    "ignore": ["build", ".react-router", "worker-configuration.d.ts"]
   },
   "formatter": {
     "enabled": true,

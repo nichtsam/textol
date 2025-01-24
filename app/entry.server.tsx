@@ -1,7 +1,7 @@
-import type { AppLoadContext, EntryContext } from "react-router";
-import { ServerRouter } from "react-router";
 import { isbot } from "isbot";
 import { renderToReadableStream } from "react-dom/server";
+import type { AppLoadContext, EntryContext } from "react-router";
+import { ServerRouter } from "react-router";
 
 const ABORT_DELAY = 5000;
 
@@ -10,7 +10,7 @@ export default async function handleRequest(
   responseStatusCode: number,
   responseHeaders: Headers,
   routerContext: EntryContext,
-  _loadContext: AppLoadContext
+  _loadContext: AppLoadContext,
 ) {
   let didError = false;
   const controller = new AbortController();
@@ -27,7 +27,7 @@ export default async function handleRequest(
         }
         didError = true;
       },
-    }
+    },
   );
 
   body.allReady.then(() => clearTimeout(timeoutId));

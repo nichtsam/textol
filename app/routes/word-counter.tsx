@@ -1,5 +1,5 @@
 import { ClipboardPaste } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
@@ -108,7 +108,7 @@ function AnalysisItem({
     <div
       className={cn(
         "flex flex-col items-center rounded-xl border bg-card text-card-foreground shadow p-2 grow",
-        className
+        className,
       )}
     >
       <span>{content}</span>
