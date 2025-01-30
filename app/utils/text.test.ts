@@ -66,6 +66,20 @@ test("count correctly", () => {
         ],
       },
     ],
+    [
+      "這樣子算一句話。這樣子也算一句話？這樣子也算一句話！",
+      {
+        chars: 26,
+        charsNoSpaces: 26,
+        words: ["這樣子算一句話", "這樣子也算一句話", "這樣子也算一句話"],
+        sentences: [
+          "這樣子算一句話。",
+          "這樣子也算一句話？",
+          "這樣子也算一句話！",
+        ],
+        paragraphs: ["這樣子算一句話。這樣子也算一句話？這樣子也算一句話！"],
+      },
+    ],
   ];
 
   for (const [text, expected] of cases) {
