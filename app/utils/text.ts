@@ -25,46 +25,62 @@ export function analyzeText(text: string) {
     const char = text[i]!;
     const peek = text[i + 1] ?? "\0";
 
-    if (/\S/.test(char)) {
+    const isSpace = (char: string) => /\s/.test(char);
+
+    const isWesternPunctuation = (char: string, peek: string) =>
+      /[\.!?]/.test(char) && (isSpace(peek) || isParagraphBound(char));
+    const isCJKPunctuation = (char: string, peek: string) =>
+      /[。！？]/.test(char) && !/[。！？]/.test(peek);
+    const isPunctuation = (char: string, peek: string) =>
+      isWesternPunctuation(char, peek) || isCJKPunctuation(char, peek);
+
+    const isParagraphBound = (char: string) => /\n/.test(char);
+    const isSentenceBound = (char: string, peek: string) =>
+      isParagraphBound(char) || isPunctuation(char, peek);
+    const isWordBound = (char: string, peek: string) =>
+      isSentenceBound(char, peek) || isSpace(char);
+
+    if (!isSpace(char)) {
       stats.charsNoSpaces += 1;
-      if (!/[。！？]/.test(char)) {
-        word += char;
+    }
+
+    if (!isWordBound(char, peek)) {
+      word += char;
+    }
+
+    if (!isSentenceBound(char, peek)) {
+      if (!isSpace(char) || sentence.length !== 0) {
+        sentence += char;
       }
     }
 
-    if (/[^\n\0]/.test(char)) {
-      if (char !== " " || sentence.length !== 0) {
-        sentence += char;
-      }
+    if (!isParagraphBound(char)) {
       paragraph += char;
     }
 
-    if (word.length !== 0 && /[\s\0。！？]/.test(peek)) {
-      word = word.replace(/[.!?。！？]*$/, "");
+    if (word.length !== 0 && isWordBound(char, peek)) {
+      word = word.replace(/[.!?。！？]*$/, ""); // strip away puntuations
       stats.words.push(word);
       word = "";
     }
 
-    if (
-      (sentence.length !== 0 && /[.!?]/.test(char) && /[\s\0]/.test(peek)) ||
-      /[。！？]/.test(char)
-    ) {
+    if (sentence.length !== 0 && isSentenceBound(char, peek)) {
+      if (isPunctuation(char, peek)) {
+        sentence = sentence + char; // sentences should include puntuations
+      }
       stats.sentences.push(sentence);
       sentence = "";
     }
 
-    if (sentence.length !== 0 && /\n/.test(char)) {
-      stats.sentences.push(sentence);
-      sentence = "";
-    }
-
-    if (paragraph.length !== 0 && /\n/.test(char)) {
+    if (paragraph.length !== 0 && isParagraphBound(char)) {
       stats.paragraphs.push(paragraph);
       paragraph = "";
     }
   }
 
+  // if reaches the end without meeting any end
   if (word.length !== 0) {
+    word = word.replace(/[.!?。！？]*$/, ""); // strip away puntuations
     stats.words.push(word);
     word = "";
   }
