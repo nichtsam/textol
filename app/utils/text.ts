@@ -25,21 +25,6 @@ export function analyzeText(text: string) {
     const char = text[i]!;
     const peek = text[i + 1] ?? "\0";
 
-    const isSpace = (char: string) => /\s/.test(char);
-
-    const isWesternPunctuation = (char: string, peek: string) =>
-      /[\.!?]/.test(char) && (isSpace(peek) || isParagraphBound(char));
-    const isCJKPunctuation = (char: string, peek: string) =>
-      /[。！？]/.test(char) && !/[。！？]/.test(peek);
-    const isPunctuation = (char: string, peek: string) =>
-      isWesternPunctuation(char, peek) || isCJKPunctuation(char, peek);
-
-    const isParagraphBound = (char: string) => /\n/.test(char);
-    const isSentenceBound = (char: string, peek: string) =>
-      isParagraphBound(char) || isPunctuation(char, peek);
-    const isWordBound = (char: string, peek: string) =>
-      isSentenceBound(char, peek) || isSpace(char);
-
     if (!isSpace(char)) {
       stats.charsNoSpaces += 1;
     }
@@ -96,4 +81,28 @@ export function analyzeText(text: string) {
   }
 
   return stats;
+}
+
+function isSpace(char: string) {
+  return /\s/.test(char);
+}
+
+function isWesternPunctuation(char: string, peek: string) {
+  return /[\.!?]/.test(char) && (isSpace(peek) || isParagraphBound(char));
+}
+function isCJKPunctuation(char: string, peek: string) {
+  return /[。！？]/.test(char) && !/[。！？]/.test(peek);
+}
+function isPunctuation(char: string, peek: string) {
+  return isWesternPunctuation(char, peek) || isCJKPunctuation(char, peek);
+}
+
+function isParagraphBound(char: string) {
+  return /\n/.test(char);
+}
+function isSentenceBound(char: string, peek: string) {
+  return isParagraphBound(char) || isPunctuation(char, peek);
+}
+function isWordBound(char: string, peek: string) {
+  return isSentenceBound(char, peek) || isSpace(char);
 }
